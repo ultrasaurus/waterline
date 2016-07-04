@@ -233,5 +233,25 @@ describe('Collection Query', function() {
       });
     });
 
+    it('should create associated objects', function(done) {
+      Taxi.find(1).exec(function(err, taxis) {
+        if (err) {
+          return done(err);
+        }
+        taxi = taxis[0]
+        assert(taxi.taxiId === 1);
+
+        Driver.create({driverName:'Fred', taxis:[taxi]}).exec(function(err, driver) {
+          if (err) {
+            return done(err);
+          }
+          console.log('driver', driver)
+          assert(driver.driverName === 'Fred');
+          assert(driver.taxis.length === 1);
+        })
+      })
+    });
+
+
   });
 });
